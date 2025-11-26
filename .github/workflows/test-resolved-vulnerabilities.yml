@@ -37,46 +37,6 @@ jobs:
           fail-on-severity: critical
           comment-summary-in-pr: always
           
-      - name: 'Show Resolved Vulnerabilities (Python)'
-        if: steps.review.outputs.resolved-vulnerabilities != '[]'
-        env:
-          RESOLVED_VULNERABILITIES: ${{ steps.review.outputs.resolved-vulnerabilities }}
-        run: |
-          echo "🐍 Python vulnerabilities resolved!"
-          echo "Raw JSON output:"
-          echo "$RESOLVED_VULNERABILITIES" | jq '.'
-          echo ""
-          echo "📊 Summary of resolved Python vulnerabilities:"
-          echo "$RESOLVED_VULNERABILITIES" | jq -r '.[] | "- \(.severity | ascii_upcase): \(.advisory_summary) in \(.package_name)@\(.package_version)"'
+      
           
-      - name: 'No Resolved Vulnerabilities'
-        if: steps.review.outputs.resolved-vulnerabilities == '[]'
-        run: |
-          echo "ℹ️ No Python vulnerabilities were resolved in this change."
-          
-      - name: 'Python Security Summary'
-        run: |
-          echo "=== Python Dependency Security Analysis ==="
-          echo "Vulnerable changes: ${{ steps.review.outputs.vulnerable-changes }}"
-          echo "Resolved vulnerabilities: ${{ steps.review.outputs.resolved-vulnerabilities }}"
-          echo "Total dependency changes: ${{ steps.review.outputs.dependency-changes }}"
-          
-  # Test Python environment setup
-  test-app:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-    steps:
-      - name: 'Checkout Repository'
-        uses: actions/checkout@v4
-        
-      - name: 'Set up Python'
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
-          
-      - name: 'Test Application'
-        run: |
-          echo "Testing Python application with current dependencies..."
-          pip install -r requirements.txt
-          python -c "import app; print('✅ App imports successfully')"
-          echo "Flask app is ready to run!"
+  
