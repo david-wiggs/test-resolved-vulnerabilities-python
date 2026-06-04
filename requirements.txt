@@ -1,6 +1,6 @@
 # Upgraded dependencies - resolving known vulnerabilities
 # Django upgraded to 4.2.17 but still has a critical CVE
-Django==4.2.17
+Django==5.2.8
 requests==2.32.3
 Pillow==11.1.0
 PyYAML==6.0.2
