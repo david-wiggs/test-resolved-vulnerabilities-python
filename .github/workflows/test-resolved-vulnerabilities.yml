@@ -17,7 +17,7 @@ jobs:
 
       - name: 'Dependency Review with Resolved Vulnerabilities'
         id: review
-        uses: david-wiggs/dependency-review-action@main
+        uses: david-wiggs/dependency-review-action@test-with-dist
         with:
           fail-on-severity: critical
           show-resolved-vulnerabilities: true
