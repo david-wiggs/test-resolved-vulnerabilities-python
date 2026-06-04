@@ -3,8 +3,6 @@ name: 'Test Resolved Vulnerabilities - Python'
 on:
   pull_request:
     branches: [ main ]
-  push:
-    branches: [ main ]
 
 permissions:
   contents: read
@@ -13,30 +11,30 @@ permissions:
 jobs:
   dependency-review:
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
     steps:
       - name: 'Checkout Repository'
         uses: actions/checkout@v4
-        
-      - name: 'Set up Python'
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
-          
-      - name: 'Install Dependencies (for context)'
-        run: |
-          echo "Installing current dependencies..."
-          pip install -r requirements.txt
-          echo "Installed packages:"
-          pip list
-        
+
       - name: 'Dependency Review with Resolved Vulnerabilities'
         id: review
         uses: david-wiggs/dependency-review-action@main
         with:
           fail-on-severity: critical
+          show-resolved-vulnerabilities: true
           comment-summary-in-pr: always
-          
-      
-          
-  
+
+      - name: 'Show Resolved Vulnerabilities Output'
+        if: always()
+        env:
+          RESOLVED: ${{ steps.review.outputs.resolved-vulnerabilities }}
+        run: |
+          echo "=== Resolved Vulnerabilities Output ==="
+          echo "$RESOLVED" | jq .
+          COUNT=$(echo "$RESOLVED" | jq 'length')
+          echo "Total resolved: $COUNT"
+          if [ "$COUNT" -gt "0" ]; then
+            echo "🎉 This PR resolves $COUNT vulnerabilities!"
+            echo "$RESOLVED" | jq -r '.[] | "  - \(.severity | ascii_upcase): \(.advisory_summary) in \(.package_name)@\(.package_version)"'
+          else
+            echo "No resolved vulnerabilities detected."
+          fi
