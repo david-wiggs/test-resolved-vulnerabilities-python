@@ -1,11 +1,12 @@
-# Test dependencies with known vulnerabilities
-Django==3.1.0
-requests==2.25.0
-Pillow==8.0.0
-PyYAML==5.3.1
-Flask==1.1.1
-jinja2==2.10.1
-werkzeug==1.0.0
-urllib3==1.25.8
-certifi==2020.6.20
-click==7.1.1
+# Upgraded dependencies - resolving known vulnerabilities
+# Django upgraded to 4.2.17 but still has a critical CVE
+Django==5.2.8
+requests==2.32.3
+Pillow==11.1.0
+PyYAML==6.0.2
+Flask==3.1.0
+jinja2==3.1.5
+werkzeug==3.1.3
+urllib3==2.3.0
+certifi==2024.12.14
+click==8.1.8
